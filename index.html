@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UPSC CSE Syllabus — Geography Optional</title>
+  <meta name="description" content="Complete UPSC Civil Services Examination syllabus with stunning visualizations. Geography optional covered in depth.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <div class="toast-msg" id="toast" role="alert"></div>
+
+  <!-- Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
+      <a href="#" class="font-display font-bold text-lg tracking-tight text-fg flex items-center gap-2 shrink-0" aria-label="Home">
+        <span class="w-8 h-8 rounded-lg bg-accent2 flex items-center justify-center text-bg text-xs font-bold">U</span>
+        <span class="hidden sm:inline">UPSC Syllabus</span>
+      </a>
+      <nav class="hidden lg:flex items-center gap-6 font-display text-sm font-medium" aria-label="Main">
+        <a href="#structure" class="nav-link" data-sec="structure">Structure</a>
+        <a href="#syllabus-map" class="nav-link" data-sec="syllabus-map">Syllabus Map</a>
+        <a href="#prelims" class="nav-link" data-sec="prelims">Prelims</a>
+        <a href="#mains" class="nav-link" data-sec="mains">Mains</a>
+        <a href="#geography" class="nav-link" data-sec="geography" style="color:var(--accent)">Geography</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <div class="relative flex items-center">
+          <input type="text" id="searchInput" class="search-box collapsed form-input py-2 text-sm" placeholder="Search topics..." aria-label="Search topics">
+          <button id="searchBtn" class="text-muted hover:text-fg transition-colors p-2" aria-label="Toggle search">
+            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+          </button>
+        </div>
+        <button class="lg:hidden text-fg text-xl p-2" id="menuToggle" aria-label="Menu" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="fixed inset-0 bg-bg/97 backdrop-blur-xl z-[999] flex flex-col items-center justify-center gap-7 opacity-0 pointer-events-none transition-opacity duration-400" id="mobileMenu">
+    <a href="#structure" class="font-display text-2xl font-semibold text-fg" onclick="closeMobile()">Structure</a>
+    <a href="#syllabus-map" class="font-display text-2xl font-semibold text-fg" onclick="closeMobile()">Syllabus Map</a>
+    <a href="#prelims" class="font-display text-2xl font-semibold text-fg" onclick="closeMobile()">Prelims</a>
+    <a href="#mains" class="font-display text-2xl font-semibold text-fg" onclick="closeMobile()">Mains</a>
+    <a href="#geography" class="font-display text-2xl font-semibold text-accent" onclick="closeMobile()">Geography Optional</a>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+      <div class="absolute inset-0 bg-gradient-to-b from-bg via-bg to-transparent z-[1]" style="top:60%"></div>
+      <div class="absolute w-[600px] h-[600px] rounded-full bg-accent2/10 blur-[140px] top-[-15%] left-[-10%]" id="blob1"></div>
+      <div class="absolute w-[400px] h-[400px] rounded-full bg-accent/8 blur-[120px] bottom-[10%] right-[-5%]" id="blob2"></div>
+      <canvas id="globeCanvas" aria-hidden="true"></canvas>
+      <div class="relative z-10 text-center px-5 max-w-4xl mx-auto">
+        <div class="reveal mb-5">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-xs font-display text-muted tracking-wider uppercase">
+            <span class="w-2 h-2 rounded-full bg-accent2 animate-pulse"></span>
+            Civil Services Examination 2025
+          </span>
+        </div>
+        <h1 class="reveal reveal-d1 font-display font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[.92] tracking-tight mb-6">
+          Complete<br>UPSC <span class="text-accent">Syllabus</span>
+        </h1>
+        <p class="reveal reveal-d2 text-muted text-lg sm:text-xl max-w-2xl mx-auto mb-4 font-light leading-relaxed">
+          Every paper, every topic, every sub-topic — organized and visualized.
+        </p>
+        <p class="reveal reveal-d3 text-accent font-display font-medium text-base mb-10 tracking-wide">
+          Optional: Geography
+        </p>
+        <div class="reveal reveal-d4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button class="btn-primary-green" onclick="scrollTo('#syllabus-map')">
+            Explore Syllabus Map <i class="fa-solid fa-arrow-down ml-2"></i>
+          </button>
+          <button class="btn-outline-gold" onclick="scrollTo('#geography')">
+            Jump to Geography
+          </button>
+        </div>
+      </div>
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted text-xs font-display z-10" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="w-px h-8 bg-gradient-to-b from-muted to-transparent"></div>
+      </div>
+    </section>
+
+    <!-- EXAM STRUCTURE -->
+    <section class="py-20 sm:py-28 px-5" id="structure">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-14">
+          <p class="reveal font-display text-accent2 text-xs font-medium tracking-[.2em] uppercase mb-3">Examination Pathway</p>
+          <h2 class="reveal reveal-d1 font-display font-bold text-3xl sm:text-4xl tracking-tight">How the exam works</h2>
+        </div>
+        <div class="reveal reveal-d2 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card-glow bg-card border border-border rounded-2xl p-7 text-center">
+            <div class="w-14 h-14 rounded-xl bg-accent2/10 flex items-center justify-center text-accent2 text-2xl mx-auto mb-5"><i class="fa-solid fa-clipboard-list"></i></div>
+            <h3 class="font-display font-bold text-xl mb-2">Preliminary</h3>
+            <p class="text-muted text-sm mb-4 leading-relaxed">Objective-type screening test. Two papers of 200 marks each. GS Paper II is qualifying (33%).</p>
+            <div class="flex justify-center gap-2 flex-wrap">
+              <span class="badge-pre text-xs px-3 py-1 rounded-full font-display">Paper I — 200M</span>
+              <span class="badge-pre text-xs px-3 py-1 rounded-full font-display">Paper II — 200M</span>
+            </div>
+          </div>
+          <div class="card-glow bg-card border border-border rounded-2xl p-7 text-center md:mt-8">
+            <div class="w-14 h-14 rounded-xl bg-accent2/10 flex items-center justify-center text-accent2 text-2xl mx-auto mb-5"><i class="fa-solid fa-pen-fancy"></i></div>
+            <h3 class="font-display font-bold text-xl mb-2">Main Examination</h3>
+            <p class="text-muted text-sm mb-4 leading-relaxed">Written examination with 9 papers. Qualifying language papers + 7 merit-based papers including optional.</p>
+            <div class="flex justify-center gap-2 flex-wrap">
+              <span class="badge-gs text-xs px-3 py-1 rounded-full font-display">4 GS Papers</span>
+              <span class="badge-geo text-xs px-3 py-1 rounded-full font-display">2 Optional</span>
+              <span class="badge-pre text-xs px-3 py-1 rounded-full font-display">Essay</span>
+            </div>
+          </div>
+          <div class="card-glow bg-card border border-border rounded-2xl p-7 text-center">
+            <div class="w-14 h-14 rounded-xl bg-accent2/10 flex items-center justify-center text-accent2 text-2xl mx-auto mb-5"><i class="fa-solid fa-user-tie"></i></div>
+            <h3 class="font-display font-bold text-xl mb-2">Personality Test</h3>
+            <p class="text-muted text-sm mb-4 leading-relaxed">Board interview assessing mental alertness, critical thinking, balance of judgement, and depth of understanding.</p>
+            <div class="flex justify-center gap-2 flex-wrap">
+              <span class="badge-gs text-xs px-3 py-1 rounded-full font-display">275 Marks</span>
+            </div>
+          </div>
+        </div>
+        <div class="reveal reveal-d3 mt-8 flex flex-wrap items-center justify-center gap-3 text-muted text-sm font-display">
+          <span>Total Marks:</span>
+          <span class="text-fg font-bold text-lg">2025</span>
+          <span class="text-border">|</span>
+          <span>Prelims: 400 (qualifying)</span>
+          <span class="text-border">|</span>
+          <span>Mains: 1750</span>
+          <span class="text-border">|</span>
+          <span>Interview: 275</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line max-w-6xl mx-auto"></div>
+
+    <!-- RADIAL SYLLABUS MAP -->
+    <section class="py-20 sm:py-28 px-5" id="syllabus-map">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <p class="reveal font-display text-accent2 text-xs font-medium tracking-[.2em] uppercase mb-3">Visualization</p>
+          <h2 class="reveal reveal-d1 font-display font-bold text-3xl sm:text-4xl tracking-tight">Syllabus at a Glance</h2>
+          <p class="reveal reveal-d2 text-muted text-base mt-3 max-w-xl mx-auto">Proportional view of topic weight across all papers. Geography optional highlighted in gold.</p>
+        </div>
+        <div class="reveal reveal-d2 relative flex justify-center">
+          <canvas id="radialCanvas" width="700" height="700" style="max-width:100%;height:auto;" aria-label="Radial syllabus chart showing topic distribution"></canvas>
+          <div class="radial-tip" id="radialTip"></div>
+        </div>
+        <div class="reveal reveal-d3 flex flex-wrap justify-center gap-4 mt-8 text-xs font-display">
+          <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm" style="background:#8a7a4c"></span> Prelims</span>
+          <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm" style="background:#3a5a4c"></span> Qualifying</span>
+          <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm" style="background:#2a8b6e"></span> General Studies</span>
+          <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm" style="background:#5aaa8a"></span> Essay</span>
+          <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm" style="background:#c9a84c"></span> Geography Optional</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line max-w-6xl mx-auto"></div>
+
+    <!-- PRELIMS -->
+    <section class="py-20 sm:py-28 px-5" id="prelims">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-12">
+          <p class="reveal font-display text-accent2 text-xs font-medium tracking-[.2em] uppercase mb-3">Part A</p>
+          <h2 class="reveal reveal-d1 font-display font-bold text-3xl sm:text-4xl tracking-tight">Preliminary Examination</h2>
+          <p class="reveal reveal-d2 text-muted text-base mt-3">Two objective-type papers serving as a screening test. Both are mandatory.</p>
+        </div>
+        <div class="reveal reveal-d2 bg-card border border-border rounded-2xl mb-5 overflow-hidden" data-search="prelims current events national international history india movement geography physical social economic polity governance constitution panchayati raj public policy rights sustainable development poverty inclusion demographics social sector environmental ecology biodiversity climate change general science">
+          <div class="acc-header flex items-center justify-between p-6" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-accent2/10 flex items-center justify-center text-accent2 font-display font-bold text-sm">I</span>
+              <div><h3 class="font-display font-semibold text-lg">General Studies Paper I</h3><p class="text-muted text-xs mt-0.5">200 marks &middot; 2 hours &middot; 7 topic areas</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-6 pb-6"><div class="space-y-1 pt-2">
+            <div class="topic-item">Current events of national and international importance</div>
+            <div class="topic-item">History of India and Indian National Movement</div>
+            <div class="topic-item">Indian and World Geography — Physical, Social, Economic Geography of India and the World</div>
+            <div class="topic-item">Indian Polity and Governance — Constitution, Political System, Panchayati Raj, Public Policy, Rights Issues</div>
+            <div class="topic-item">Economic and Social Development — Sustainable Development, Poverty, Inclusion, Demographics, Social Sector Initiatives</div>
+            <div class="topic-item">General issues on Environmental Ecology, Bio-diversity and Climate Change (no subject specialization required)</div>
+            <div class="topic-item">General Science</div>
+          </div></div>
+        </div>
+        <div class="reveal reveal-d3 bg-card border border-border rounded-2xl mb-5 overflow-hidden" data-search="prelims csat comprehension interpersonal communication logical reasoning analytical ability decision making problem solving mental ability numeracy data interpretation charts graphs tables">
+          <div class="acc-header flex items-center justify-between p-6" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-accent2/10 flex items-center justify-center text-accent2 font-display font-bold text-sm">II</span>
+              <div><h3 class="font-display font-semibold text-lg">General Studies Paper II (CSAT)</h3><p class="text-muted text-xs mt-0.5">200 marks &middot; 2 hours &middot; Qualifying (33% minimum)</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-6 pb-6"><div class="space-y-1 pt-2">
+            <div class="topic-item">Comprehension</div>
+            <div class="topic-item">Interpersonal skills including communication skills</div>
+            <div class="topic-item">Logical reasoning and analytical ability</div>
+            <div class="topic-item">Decision making and problem solving</div>
+            <div class="topic-item">General mental ability</div>
+            <div class="topic-item">Basic numeracy and Data interpretation (Class X level)</div>
+          </div>
+          <div class="mt-4 p-4 rounded-lg bg-surface border border-border text-xs text-muted leading-relaxed">
+            <i class="fa-solid fa-circle-info text-accent2 mr-1"></i>
+            <strong class="text-fg">Note:</strong> Paper II is qualifying only with minimum 33% marks. Both papers are mandatory — absence in either leads to disqualification. All questions are multiple choice, objective type.
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line max-w-6xl mx-auto"></div>
+
+    <!-- MAINS GS -->
+    <section class="py-20 sm:py-28 px-5" id="mains">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-12">
+          <p class="reveal font-display text-accent2 text-xs font-medium tracking-[.2em] uppercase mb-3">Part B</p>
+          <h2 class="reveal reveal-d1 font-display font-bold text-3xl sm:text-4xl tracking-tight">Main Examination</h2>
+          <p class="reveal reveal-d2 text-muted text-base mt-3">Assesses overall intellectual traits and depth of understanding. 7 merit-ranked papers.</p>
+        </div>
+
+        <!-- Qualifying -->
+        <div class="reveal bg-card border border-border rounded-2xl mb-4 overflow-hidden" data-search="qualifying language english indian comprehension precis writing usage vocabulary short essays translation matriculation">
+          <div class="acc-header flex items-center justify-between p-5" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-surface flex items-center justify-center text-muted font-display font-bold text-xs">Q</span>
+              <div><h3 class="font-display font-semibold text-base">Qualifying Papers — Indian Language & English</h3><p class="text-muted text-xs mt-0.5">Matriculation standard &middot; Not counted for ranking</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-5 pb-5">
+            <p class="geo-subhead">English</p>
+            <div class="space-y-1"><div class="topic-item">Comprehension of given passages</div><div class="topic-item">Precis Writing</div><div class="topic-item">Usage and Vocabulary</div><div class="topic-item">Short Essays</div></div>
+            <p class="geo-subhead mt-4">Indian Language</p>
+            <div class="space-y-1"><div class="topic-item">Comprehension of given passages</div><div class="topic-item">Precis Writing</div><div class="topic-item">Usage and Vocabulary</div><div class="topic-item">Short Essays</div><div class="topic-item">Translation from English to the Indian Language and vice-versa</div></div>
+          </div>
+        </div>
+
+        <!-- Essay -->
+        <div class="reveal reveal-d1 bg-card border border-border rounded-2xl mb-4 overflow-hidden" data-search="essay multiple topics orderly concise expression">
+          <div class="acc-header flex items-center justify-between p-5" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-accent2/10 flex items-center justify-center text-accent2 font-display font-bold text-xs">I</span>
+              <div><h3 class="font-display font-semibold text-base">Paper I — Essay</h3><p class="text-muted text-xs mt-0.5">250 marks</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-5 pb-5"><div class="topic-item">Candidates may be required to write essays on multiple topics. Expected to keep closely to the subject, arrange ideas in orderly fashion, and write concisely. Credit for effective and exact expression.</div></div>
+        </div>
+
+        <!-- GS-I -->
+        <div class="reveal reveal-d1 bg-card border border-border rounded-2xl mb-4 overflow-hidden" data-search="gs1 heritage culture history geography world society art forms literature architecture freedom struggle post-independence world history industrial revolution world wars colonization decolonization political philosophies communism capitalism socialism physical geography natural resources geophysical phenomena earthquakes tsunami volcanic cyclone">
+          <div class="acc-header flex items-center justify-between p-5" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-accent2/10 flex items-center justify-center text-accent2 font-display font-bold text-xs">II</span>
+              <div><h3 class="font-display font-semibold text-base">Paper II — GS-I: Heritage, History & Geography</h3><p class="text-muted text-xs mt-0.5">250 marks &middot; 12 topic areas</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-5 pb-5"><div class="space-y-1">
+            <div class="topic-item">Indian culture — salient aspects of Art Forms, Literature and Architecture from ancient to modern times</div>
+            <div class="topic-item">Modern Indian history from mid-18th century — significant events, personalities, issues</div>
+            <div class="topic-item">The Freedom Struggle — stages and important contributors from different parts of the country</div>
+            <div class="topic-item">Post-independence consolidation and reorganization</div>
+            <div class="topic-item">World history — 18th century events: industrial revolution, world wars, redrawal of boundaries, colonization, decolonization, political philosophies (communism, capitalism, socialism)</div>
+            <div class="topic-item">Salient features of Indian Society, Diversity of India</div>
+            <div class="topic-item">Role of women and women's organizations, population issues, poverty, urbanization — problems and remedies</div>
+            <div class="topic-item">Effects of globalization on Indian society</div>
+            <div class="topic-item">Social empowerment, communalism, regionalism & secularism</div>
+            <div class="topic-item">Salient features of world's physical geography</div>
+            <div class="topic-item">Distribution of key natural resources; factors for location of industries across the world</div>
+            <div class="topic-item">Important Geophysical phenomena — earthquakes, Tsunami, Volcanic activity, cyclones; changes in critical geographical features and their effects</div>
+          </div></div>
+        </div>
+
+        <!-- GS-II -->
+        <div class="reveal reveal-d2 bg-card border border-border rounded-2xl mb-4 overflow-hidden" data-search="gs2 governance constitution polity social justice international relations amendment provisions basic structure federal devolution separation powers parliament legislature executive judiciary representation people act constitutional bodies statutory regulatory quasi-judicial government policies ngo shg welfare schemes health education poverty hunger e-governance civil services neighborhood bilateral regional global groupings agreements diaspora international institutions agencies fora">
+          <div class="acc-header flex items-center justify-between p-5" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-accent2/10 flex items-center justify-center text-accent2 font-display font-bold text-xs">III</span>
+              <div><h3 class="font-display font-semibold text-base">Paper III — GS-II: Governance, Polity & International Relations</h3><p class="text-muted text-xs mt-0.5">250 marks &middot; 20 topic areas</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-5 pb-5"><div class="space-y-1">
+            <div class="topic-item">Indian Constitution — historical underpinnings, evolution, features, amendments, basic structure</div>
+            <div class="topic-item">Functions and responsibilities of Union and States; federal structure; devolution of powers and finances</div>
+            <div class="topic-item">Separation of powers; dispute redressal mechanisms and institutions</div>
+            <div class="topic-item">Comparison of Indian constitutional scheme with other countries</div>
+            <div class="topic-item">Parliament and State legislatures — structure, functioning, powers & privileges</div>
+            <div class="topic-item">Structure and functioning of Executive and Judiciary; pressure groups and associations</div>
+            <div class="topic-item">Salient features of Representation of People's Act</div>
+            <div class="topic-item">Appointment to Constitutional posts; powers and responsibilities of Constitutional Bodies</div>
+            <div class="topic-item">Statutory, regulatory and quasi-judicial bodies</div>
+            <div class="topic-item">Government policies and interventions for development; issues in design and implementation</div>
+            <div class="topic-item">Development processes — role of NGOs, SHGs, donors, charities, stakeholders</div>
+            <div class="topic-item">Welfare schemes for vulnerable sections; performance; protection mechanisms</div>
+            <div class="topic-item">Issues relating to Health, Education, Human Resources</div>
+            <div class="topic-item">Issues relating to poverty and hunger</div>
+            <div class="topic-item">Governance, transparency, accountability; e-governance; citizens charters</div>
+            <div class="topic-item">Role of civil services in a democracy</div>
+            <div class="topic-item">India and its neighborhood — relations</div>
+            <div class="topic-item">Bilateral, regional and global groupings and agreements involving India</div>
+            <div class="topic-item">Effect of policies and politics of developed and developing countries on India's interests</div>
+            <div class="topic-item">Important International institutions, agencies and fora — structure and mandate</div>
+          </div></div>
+        </div>
+
+        <!-- GS-III -->
+        <div class="reveal reveal-d3 bg-card border border-border rounded-2xl mb-4 overflow-hidden" data-search="gs3 technology economic development biodiversity environment security disaster management economy planning resources growth employment inclusive budgeting crops irrigation agriculture subsidies msp pds food security food processing land reforms liberalization infrastructure investment science technology it space robotics nano-technology bio-technology intellectual property conservation pollution degradation eia disaster extremism internal security cyber security money-laundering border terrorism security forces">
+          <div class="acc-header flex items-center justify-between p-5" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-accent2/10 flex items-center justify-center text-accent2 font-display font-bold text-xs">IV</span>
+              <div><h3 class="font-display font-semibold text-base">Paper IV — GS-III: Technology, Economy, Environment & Security</h3><p class="text-muted text-xs mt-0.5">250 marks &middot; 20 topic areas</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-5 pb-5"><div class="space-y-1">
+            <div class="topic-item">Indian Economy — planning, mobilization of resources, growth, development, employment</div>
+            <div class="topic-item">Inclusive growth and issues arising from it</div>
+            <div class="topic-item">Government Budgeting</div>
+            <div class="topic-item">Major crops — cropping patterns; irrigation systems; e-technology in aid of farmers</div>
+            <div class="topic-item">Farm subsidies, MSP, Public Distribution System, buffer stocks, food security</div>
+            <div class="topic-item">Food processing industries — scope, location, supply chain management</div>
+            <div class="topic-item">Land reforms in India</div>
+            <div class="topic-item">Effects of liberalization; changes in industrial policy and industrial growth</div>
+            <div class="topic-item">Infrastructure — Energy, Ports, Roads, Airports, Railways</div>
+            <div class="topic-item">Investment models</div>
+            <div class="topic-item">Science and Technology — developments and applications in everyday life</div>
+            <div class="topic-item">Achievements of Indians in S&T; indigenization and new technology</div>
+            <div class="topic-item">IT, Space, Computers, robotics, nano-technology, bio-technology; intellectual property rights</div>
+            <div class="topic-item">Conservation, environmental pollution and degradation, EIA</div>
+            <div class="topic-item">Disaster and disaster management</div>
+            <div class="topic-item">Linkages between development and spread of extremism</div>
+            <div class="topic-item">External state and non-state actors — challenges to internal security</div>
+            <div class="topic-item">Communication networks, media, social networking — internal security challenges; cyber security; money-laundering</div>
+            <div class="topic-item">Security challenges in border areas — organized crime and terrorism</div>
+            <div class="topic-item">Various Security forces and agencies — mandate</div>
+          </div></div>
+        </div>
+
+        <!-- GS-IV -->
+        <div class="reveal reveal-d4 bg-card border border-border rounded-2xl mb-4 overflow-hidden" data-search="gs4 ethics integrity aptitude attitude emotional intelligence moral thinkers philosophers public service values probity governance information sharing transparency right to information codes ethics conduct citizen charter work culture quality service delivery public funds corruption case study">
+          <div class="acc-header flex items-center justify-between p-5" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-accent2/10 flex items-center justify-center text-accent2 font-display font-bold text-xs">V</span>
+              <div><h3 class="font-display font-semibold text-base">Paper V — GS-IV: Ethics, Integrity & Aptitude</h3><p class="text-muted text-xs mt-0.5">250 marks &middot; 8 broad areas + case studies</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-muted text-sm"></i>
+          </div>
+          <div class="acc-body px-5 pb-5"><div class="space-y-1">
+            <div class="topic-item">Ethics and Human Interface — essence, determinants, consequences; dimensions; private and public relationships; Human Values from lives of great leaders, reformers, administrators</div>
+            <div class="topic-item">Attitude — content, structure, function; influence on thought and behaviour; moral and political attitudes; social influence and persuasion</div>
+            <div class="topic-item">Aptitude and foundational values for Civil Service — integrity, impartiality, non-partisanship, objectivity, dedication, empathy, tolerance, compassion</div>
+            <div class="topic-item">Emotional intelligence — concepts, utilities and application in administration</div>
+            <div class="topic-item">Contributions of moral thinkers and philosophers from India and world</div>
+            <div class="topic-item">Public/Civil service values and Ethics in Public administration — status, problems, ethical concerns and dilemmas; accountability; ethical governance; ethical issues in international relations and funding; corporate governance</div>
+            <div class="topic-item">Probity in Governance — concept of public service; philosophical basis; RTI, Codes of Ethics, Codes of Conduct, Citizen's Charters, Work culture, Quality of service delivery, Utilization of public funds, challenges of corruption</div>
+            <div class="topic-item">Case Studies on above issues</div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line-gold max-w-6xl mx-auto"></div>
+
+    <!-- GEOGRAPHY OPTIONAL -->
+    <section class="py-20 sm:py-32 px-5 contour-bg relative" id="geography">
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <svg class="w-full h-full opacity-[0.04]" viewBox="0 0 1200 800" preserveAspectRatio="none">
+          <ellipse cx="300" cy="400" rx="280" ry="200" fill="none" stroke="#c9a84c" stroke-width="1"/>
+          <ellipse cx="300" cy="400" rx="220" ry="160" fill="none" stroke="#c9a84c" stroke-width="1"/>
+          <ellipse cx="300" cy="400" rx="160" ry="120" fill="none" stroke="#c9a84c" stroke-width="1"/>
+          <ellipse cx="300" cy="400" rx="100" ry="80" fill="none" stroke="#c9a84c" stroke-width="1"/>
+          <ellipse cx="900" cy="300" rx="250" ry="180" fill="none" stroke="#2a8b6e" stroke-width="1"/>
+          <ellipse cx="900" cy="300" rx="190" ry="140" fill="none" stroke="#2a8b6e" stroke-width="1"/>
+          <ellipse cx="900" cy="300" rx="130" ry="100" fill="none" stroke="#2a8b6e" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="max-w-4xl mx-auto relative z-10">
+        <div class="text-center mb-14">
+          <div class="reveal inline-flex items-center gap-2 badge-geo px-4 py-1.5 rounded-full text-xs font-display font-medium tracking-wider uppercase mb-4 geo-glow">
+            <i class="fa-solid fa-globe"></i> Your Optional Subject
+          </div>
+          <h2 class="reveal reveal-d1 font-display font-bold text-4xl sm:text-5xl tracking-tight">Geography</h2>
+          <p class="reveal reveal-d2 text-muted text-base mt-3 max-w-2xl mx-auto">Two papers at honours degree level — higher than bachelor's, lower than master's. Covers Principles of Geography (Paper I) and Geography of India (Paper II).</p>
+        </div>
+
+        <!-- GEO PAPER I -->
+        <div class="reveal reveal-d2 bg-geobg border border-accent/20 rounded-2xl mb-6 overflow-hidden geo-glow" data-search="geography physical geomorphology climatology oceanography biogeography environmental geography human perspectives economic population settlement regional planning models theories laws landform endogenetic exogenetic earth crust geomagnetism geosynclines continental drift isostasy plate tectonics mountain building volcanicity earthquakes tsunamis geomorphic cycles landscape denudation chronology channel morphology erosion surfaces slope applied economic geology temperature pressure belts heat budget atmospheric circulation stability instability planetary local winds monsoons jet streams air masses fronts temperate tropical cyclones precipitation koppen thornthwaite trewartha hydrological cycle climatic change urban bottom topography atlantic indian pacific oceans salinity heat salt budgets deposits waves currents tides marine resources coral reefs bleaching sea-level law sea pollution soils classification distribution profile erosion degradation conservation plants animals deforestation social agro-forestry wildlife gene pool ecology adaptations influence global regional imbalances ecosystem management biodiversity sustainable policy hazards remedial education legislation areal differentiation regional synthesis dichotomy dualism environmentalism quantitative revolution locational analysis radical behavioural human welfare languages religions secularisation cultural human development index world economic measurement problems resources energy crisis limits growth agriculture typology inputs productivity food nutrition security famine industries location patterns trade growth distribution demographic attributes migration over-under-optimum population theories policies well-being quality life social capital rural settlements environmental hierarchy urban morphology primate city rank-size rule functional classification towns sphere influence fringe satellite problems remedies cities concept region types regionalisation growth centres poles imbalances strategies system analysis malthusian marxian demographic transition central place christaller losch perroux boudeville von thunen weber rostow heart-land rimland boundaries frontiers">
+          <div class="acc-header flex items-center justify-between p-6" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-4">
+              <span class="w-12 h-12 rounded-xl bg-accent/15 flex items-center justify-center text-accent font-display font-bold text-base">I</span>
+              <div><h3 class="font-display font-bold text-xl text-accent">Geography Paper I — Principles of Geography</h3><p class="text-muted text-xs mt-0.5">250 marks &middot; Physical Geography + Human Geography</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-accent text-sm"></i>
+          </div>
+          <div class="acc-body px-6 pb-6">
+            <p class="geo-subhead"><i class="fa-solid fa-mountain-sun mr-2"></i>Physical Geography</p>
+            <p class="font-display font-semibold text-sm text-fg/90 mt-4 mb-2 pl-3">1. Geomorphology</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Factors controlling landform development; endogenetic and exogenetic forces</div>
+              <div class="geo-topic">Origin and evolution of the earth's crust</div>
+              <div class="geo-topic">Fundamentals of geomagnetism; Physical conditions of the earth's interior</div>
+              <div class="geo-topic">Geosynclines; Continental drift; Isostasy</div>
+              <div class="geo-topic">Plate tectonics; Recent views on mountain building</div>
+              <div class="geo-topic">Volcanicity; Earthquakes and Tsunamis</div>
+              <div class="geo-topic">Concepts of geomorphic cycles and Landscape development</div>
+              <div class="geo-topic">Denudation chronology; Channel morphology; Erosion surfaces; Slope development</div>
+              <div class="geo-topic">Applied Geomorphology; Geomorphology, economic geology and environment</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">2. Climatology</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Temperature and pressure belts of the world; Heat budget of the earth</div>
+              <div class="geo-topic">Atmospheric circulation; Atmospheric stability and instability</div>
+              <div class="geo-topic">Planetary and local winds; Monsoons and jet streams</div>
+              <div class="geo-topic">Air masses and fronts; Temperate and tropical cyclones</div>
+              <div class="geo-topic">Types and distribution of precipitation; Weather and Climate</div>
+              <div class="geo-topic">Koppen's, Thornthwaite's and Trewartha's classification of world climate</div>
+              <div class="geo-topic">Hydrological cycle; Global climatic change and role of man</div>
+              <div class="geo-topic">Applied climatology and Urban climate</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">3. Oceanography</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Bottom topography of the Atlantic, Indian and Pacific Oceans</div>
+              <div class="geo-topic">Temperature and salinity of the oceans; Heat and salt budgets</div>
+              <div class="geo-topic">Ocean deposits; Waves, currents and tides</div>
+              <div class="geo-topic">Marine resources — biotic, mineral and energy resources</div>
+              <div class="geo-topic">Coral reefs and coral bleaching; Sea-level changes</div>
+              <div class="geo-topic">Law of the sea and marine pollution</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">4. Biogeography</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Genesis of soils; Classification and distribution of soils; Soil profile</div>
+              <div class="geo-topic">Soil erosion, degradation and conservation</div>
+              <div class="geo-topic">Factors influencing world distribution of plants and animals</div>
+              <div class="geo-topic">Problems of deforestation and conservation measures</div>
+              <div class="geo-topic">Social forestry, agro-forestry; Wildlife; Major gene pool centres</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">5. Environmental Geography</p>
+            <div class="space-y-1 mb-6">
+              <div class="geo-topic">Principle ecology; Human ecological adaptations</div>
+              <div class="geo-topic">Influence of man on ecology and environment</div>
+              <div class="geo-topic">Global and regional ecological changes and imbalances</div>
+              <div class="geo-topic">Ecosystem — their management and conservation</div>
+              <div class="geo-topic">Environmental degradation, management and conservation</div>
+              <div class="geo-topic">Biodiversity and sustainable development</div>
+              <div class="geo-topic">Environmental policy; Environmental hazards and remedial measures</div>
+              <div class="geo-topic">Environmental education and legislation</div>
+            </div>
+            <p class="geo-subhead"><i class="fa-solid fa-users mr-2"></i>Human Geography</p>
+            <p class="font-display font-semibold text-sm text-fg/90 mt-4 mb-2 pl-3">1. Perspectives in Human Geography</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Areal differentiation; Regional synthesis; Dichotomy and dualism</div>
+              <div class="geo-topic">Environmentalism; Quantitative revolution and locational analysis</div>
+              <div class="geo-topic">Radical, behavioural, human and welfare approaches</div>
+              <div class="geo-topic">Languages, religions and secularisation; Cultural regions of the world</div>
+              <div class="geo-topic">Human development index</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">2. Economic Geography</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">World economic development: measurement and problems</div>
+              <div class="geo-topic">World resources and their distribution; Energy crisis; Limits to growth</div>
+              <div class="geo-topic">World agriculture: typology of agricultural regions</div>
+              <div class="geo-topic">Agricultural inputs and productivity; Food and nutrition problems; Food security</div>
+              <div class="geo-topic">Famine: causes, effects and remedies</div>
+              <div class="geo-topic">World industries: location patterns and problems; Patterns of world trade</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">3. Population and Settlement Geography</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Growth and distribution of world population; Demographic attributes</div>
+              <div class="geo-topic">Causes and consequences of migration</div>
+              <div class="geo-topic">Concepts of over-, under- and optimum population; Population theories</div>
+              <div class="geo-topic">World population problems and policies; Social well-being and quality of life</div>
+              <div class="geo-topic">Population as social capital</div>
+              <div class="geo-topic">Types and patterns of rural settlements; Environmental issues in rural settlements</div>
+              <div class="geo-topic">Hierarchy of urban settlements; Urban morphology</div>
+              <div class="geo-topic">Concept of primate city and rank-size rule; Functional classification of towns</div>
+              <div class="geo-topic">Sphere of urban influence; Rural-urban fringe; Satellite towns</div>
+              <div class="geo-topic">Problems and remedies of urbanization; Sustainable development of cities</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">4. Regional Planning</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Concept of a region; Types of regions and methods of regionalisation</div>
+              <div class="geo-topic">Growth centres and growth poles; Regional imbalances</div>
+              <div class="geo-topic">Regional development strategies</div>
+              <div class="geo-topic">Environmental issues in regional planning; Planning for sustainable development</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">5. Models, Theories and Laws in Human Geography</p>
+            <div class="space-y-1">
+              <div class="geo-topic">System analysis in Human geography</div>
+              <div class="geo-topic">Malthusian, Marxian and demographic transition models</div>
+              <div class="geo-topic">Central Place theories of Christaller and Losch</div>
+              <div class="geo-topic">Perroux and Boudeville; Von Thunen's model of agricultural location</div>
+              <div class="geo-topic">Weber's model of industrial location; Rostow's model of stages of growth</div>
+              <div class="geo-topic">Heart-land and Rimland theories</div>
+              <div class="geo-topic">Laws of international boundaries and frontiers</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GEO PAPER II -->
+        <div class="reveal reveal-d3 bg-geobg border border-accent/20 rounded-2xl mb-6 overflow-hidden geo-glow" data-search="geography india physical setting resources agriculture industry transport communication trade cultural settlements regional development political aspects contemporary issues drainage monsoon cyclone floods droughts vegetation soils minerals forest wildlife energy irrigation land reforms cropping green revolution livestock aquaculture sericulture agro-climatic locational cotton jute iron steel aluminium fertiliser paper chemical pharmaceutical automobile cottage sezs tourism roads railway waterway airway pipeline ports trade policy epz it space programme racial linguistic ethnic diversities tribes demographic attributes migration health rural urban morphology conurbations metropolitan slums town planning five year plans panchayati raj command area watershed island territories federalism state reorganisation boundary terrorism geopolitics south asia indian ocean ecological environmental hazards pollution deforestation desertification soil erosion agrarian industrial unrest disparities sustainable globalisation map question">
+          <div class="acc-header flex items-center justify-between p-6" onclick="toggleAcc(this)">
+            <div class="flex items-center gap-4">
+              <span class="w-12 h-12 rounded-xl bg-accent/15 flex items-center justify-center text-accent font-display font-bold text-base">II</span>
+              <div><h3 class="font-display font-bold text-xl text-accent">Geography Paper II — Geography of India</h3><p class="text-muted text-xs mt-0.5">250 marks &middot; 10 sections &middot; Includes compulsory map question</p></div>
+            </div>
+            <i class="fa-solid fa-chevron-down acc-chevron text-accent text-sm"></i>
+          </div>
+          <div class="acc-body px-6 pb-6">
+            <div class="p-3 rounded-lg bg-accent/5 border border-accent/15 mb-5 text-xs text-accent/90 font-display flex items-center gap-2">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <span><strong>Note:</strong> One compulsory map question will be asked from topics covered in this paper.</span>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">1. Physical Setting</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Space relationship of India with neighbouring countries</div>
+              <div class="geo-topic">Structure and relief; Drainage system and watersheds</div>
+              <div class="geo-topic">Physiographic regions; Mechanism of Indian monsoons and rainfall patterns</div>
+              <div class="geo-topic">Tropical cyclones and western disturbances; Floods and droughts</div>
+              <div class="geo-topic">Climatic regions; Natural vegetation; Soil types and their distributions</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">2. Resources</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Land, surface and ground water, energy, minerals, biotic and marine resources</div>
+              <div class="geo-topic">Forest and wild life resources and their conservation; Energy crisis</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">3. Agriculture</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Infrastructure: irrigation, seeds, fertilizers, power</div>
+              <div class="geo-topic">Institutional factors: land holdings, land tenure and land reforms</div>
+              <div class="geo-topic">Cropping pattern, agricultural productivity, agricultural intensity, crop combination, land capability</div>
+              <div class="geo-topic">Agro and social forestry; Green revolution and its socio-economic and ecological implications</div>
+              <div class="geo-topic">Significance of dry farming; Livestock resources and white revolution</div>
+              <div class="geo-topic">Aqua-culture; Sericulture; Agriculture and poultry</div>
+              <div class="geo-topic">Agricultural regionalisation; Agro-climatic zones; Agro-ecological regions</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">4. Industry</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Evolution of industries; Locational factors of cotton, jute, textile, iron and steel, aluminium, fertiliser, paper, chemical and pharmaceutical, automobile, cottage and agro-based industries</div>
+              <div class="geo-topic">Industrial houses and complexes including public sector undertakings</div>
+              <div class="geo-topic">Industrial regionalisation; New industrial policy; Multinationals and liberalisation</div>
+              <div class="geo-topic">Special Economic Zones; Tourism including ecotourism</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">5. Transport, Communication and Trade</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Road, railway, waterway, airway and pipeline networks and their complementary roles in regional development</div>
+              <div class="geo-topic">Growing importance of ports on national and foreign trade</div>
+              <div class="geo-topic">Trade balance; Trade Policy; Export processing zones</div>
+              <div class="geo-topic">Developments in communication and information technology and their impacts</div>
+              <div class="geo-topic">Indian space programme</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">6. Cultural Setting</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Historical perspective of Indian Society; Racial, linguistic and ethnic diversities</div>
+              <div class="geo-topic">Religious minorities; Major tribes, tribal areas and their problems</div>
+              <div class="geo-topic">Cultural regions; Growth, distribution and density of population</div>
+              <div class="geo-topic">Demographic attributes: sex-ratio, age structure, literacy rate, work-force, dependency ratio, longevity</div>
+              <div class="geo-topic">Migration (inter-regional, inter-state and international) and associated problems</div>
+              <div class="geo-topic">Population problems and policies; Health indicators</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">7. Settlements</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Types, patterns and morphology of rural settlements</div>
+              <div class="geo-topic">Urban developments; Morphology of Indian cities</div>
+              <div class="geo-topic">Functional classification of Indian cities; Conurbations and metropolitan regions</div>
+              <div class="geo-topic">Urban sprawl; Slums and associated problems; Town planning</div>
+              <div class="geo-topic">Problems of urbanization and remedies</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">8. Regional Development and Planning</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Experience of regional planning in India; Five Year Plans</div>
+              <div class="geo-topic">Integrated rural development programmes; Panchayati Raj and decentralised planning</div>
+              <div class="geo-topic">Command area development; Watershed management</div>
+              <div class="geo-topic">Planning for backward area, desert, drought-prone, hill and tribal area development</div>
+              <div class="geo-topic">Multi-level planning; Regional planning and development of island territories</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">9. Political Aspects</p>
+            <div class="space-y-1 mb-4">
+              <div class="geo-topic">Geographical basis of Indian federalism; State reorganisation; Emergence of new states</div>
+              <div class="geo-topic">Regional consciousness and inter-state issues</div>
+              <div class="geo-topic">International boundary of India and related issues; Cross-border terrorism</div>
+              <div class="geo-topic">India's role in world affairs; Geopolitics of South Asia and Indian Ocean realm</div>
+            </div>
+            <p class="font-display font-semibold text-sm text-fg/90 mb-2 pl-3">10. Contemporary Issues</p>
+            <div class="space-y-1">
+              <div class="geo-topic">Ecological issues: Environmental hazards — landslides, earthquakes, Tsunamis, floods, droughts, epidemics</div>
+              <div class="geo-topic">Issues related to environmental pollution; Changes in patterns of land use</div>
+              <div class="geo-topic">Principles of environmental impact assessment and environmental management</div>
+              <div class="geo-topic">Population explosion and food security</div>
+              <div class="geo-topic">Environmental degradation; Deforestation, desertification and soil erosion</div>
+              <div class="geo-topic">Problems of agrarian and industrial unrest; Regional disparities in economic development</div>
+              <div class="geo-topic">Concept of sustainable growth and development; Environmental awareness</div>
+              <div class="geo-topic">Linkage of rivers; Globalisation and Indian economy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line max-w-6xl mx-auto"></div>
+
+    <!-- STUDY PROGRESS -->
+    <section class="py-20 sm:py-28 px-5" id="dashboard">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-14">
+          <p class="reveal font-display text-accent2 text-xs font-medium tracking-[.2em] uppercase mb-3">Tracker</p>
+          <h2 class="reveal reveal-d1 font-display font-bold text-3xl sm:text-4xl tracking-tight">Study Progress</h2>
+          <p class="reveal reveal-d2 text-muted text-base mt-3">Click any ring to mark progress. Track your preparation across all papers.</p>
+        </div>
+        <div class="reveal reveal-d2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6" id="progressGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-border py-10 px-5">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-md bg-accent2 flex items-center justify-center text-bg text-xs font-bold">U</span>
+        <span class="font-display font-semibold text-sm">UPSC CSE Syllabus</span>
+      </div>
+      <p class="text-muted text-xs">Syllabus sourced from official UPSC notification. For reference only.</p>
+      <p class="text-muted text-xs">Geography Optional</p>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="fixed bottom-6 left-6 w-10 h-10 rounded-full bg-surface border border-border text-muted hover:text-fg hover:border-accent2 transition-all opacity-0 pointer-events-none z-50 flex items-center justify-center text-sm" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+:root {
+  --bg: #070b09;
+  --fg: #e8e2d4;
+  --muted: #6a7068;
+  --accent: #c9a84c;
+  --accent2: #2a8b6e;
+  --card: #0d1411;
+  --border: #1a2820;
+  --surface: #111a15;
+  --geobg: #0a1510;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+/* Noise overlay */
+.noise-overlay {
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px;
+}
+
+/* Glow lines */
+.glow-line { height: 1px; background: linear-gradient(90deg, transparent, var(--accent2), transparent); opacity: 0.4; }
+.glow-line-gold { height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.4; }
+
+/* Navigation */
+.nav-link { position: relative; color: var(--muted); transition: color 0.3s; text-decoration: none; }
+.nav-link::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1.5px; background: var(--accent); transition: width 0.3s; }
+.nav-link:hover, .nav-link.active { color: var(--fg); }
+.nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+.reveal-d4 { transition-delay: 0.4s; }
+
+/* Card glow on hover */
+.card-glow { position: relative; overflow: hidden; transition: transform 0.4s, box-shadow 0.4s; }
+.card-glow::before { content: ''; position: absolute; inset: 0; background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(42, 139, 110, 0.07), transparent 40%); z-index: 0; opacity: 0; transition: opacity 0.4s; }
+.card-glow:hover::before { opacity: 1; }
+.card-glow:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(42, 139, 110, 0.08); }
+.card-glow > * { position: relative; z-index: 1; }
+
+/* Buttons */
+.btn-primary-green {
+  background: var(--accent2); color: var(--bg); font-weight: 600; padding: 14px 32px;
+  border-radius: 8px; border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; transition: all 0.3s;
+}
+.btn-primary-green:hover { background: #1f7a5e; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(42, 139, 110, 0.3); }
+.btn-primary-green:active { transform: translateY(0) scale(0.98); }
+
+.btn-outline-gold {
+  background: transparent; color: var(--fg); font-weight: 500; padding: 14px 32px;
+  border-radius: 8px; border: 1px solid var(--border); cursor: pointer; font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; transition: all 0.3s;
+}
+.btn-outline-gold:hover { border-color: var(--accent); background: rgba(201, 168, 76, 0.06); transform: translateY(-2px); }
+.btn-outline-gold:active { transform: translateY(0) scale(0.98); }
+
+/* Badges */
+.badge-geo { background: rgba(201, 168, 76, 0.12); color: var(--accent); border: 1px solid rgba(201, 168, 76, 0.25); }
+.badge-gs { background: rgba(42, 139, 110, 0.12); color: #4ec9a0; border: 1px solid rgba(42, 139, 110, 0.25); }
+.badge-pre { background: rgba(200, 180, 140, 0.1); color: #b8a878; border: 1px solid rgba(200, 180, 140, 0.2); }
+
+/* Accordion */
+.acc-header { cursor: pointer; user-select: none; transition: background 0.3s; }
+.acc-header:hover { background: rgba(42, 139, 110, 0.04); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s; }
+.acc-body.open { max-height: 5000px; }
+.acc-chevron { transition: transform 0.3s; }
+.acc-header.active .acc-chevron { transform: rotate(180deg); }
+
+/* Topic bullets — GS */
+.topic-item {
+  padding: 6px 0 6px 20px; position: relative; color: rgba(232, 226, 212, 0.75);
+  font-size: 14px; line-height: 1.6; border-left: 2px solid var(--border);
+  margin-left: 8px; transition: border-color 0.3s, color 0.3s;
+}
+.topic-item:hover { border-left-color: var(--accent2); color: var(--fg); }
+.topic-item::before {
+  content: ''; position: absolute; left: -5px; top: 14px; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--border); transition: background 0.3s;
+}
+.topic-item:hover::before { background: var(--accent2); }
+
+/* Topic bullets — Geography */
+.geo-topic {
+  padding: 8px 0 8px 24px; position: relative; color: rgba(232, 226, 212, 0.78);
+  font-size: 14px; line-height: 1.65; border-left: 2px solid rgba(201, 168, 76, 0.2);
+  margin-left: 10px; transition: border-color 0.3s, color 0.3s;
+}
+.geo-topic:hover { border-left-color: var(--accent); color: var(--fg); }
+.geo-topic::before {
+  content: ''; position: absolute; left: -5px; top: 16px; width: 8px; height: 8px;
+  border-radius: 50%; background: rgba(201, 168, 76, 0.3); transition: background 0.3s;
+}
+.geo-topic:hover::before { background: var(--accent); }
+
+/* Geography sub-heading */
+.geo-subhead {
+  font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+  margin: 16px 0 8px; padding-left: 12px; border-left: 3px solid var(--accent);
+}
+
+/* Contour background for Geography section */
+.contour-bg {
+  background-image:
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(42, 139, 110, 0.06), transparent),
+    radial-gradient(ellipse 500px 350px at 80% 60%, rgba(201, 168, 76, 0.04), transparent),
+    radial-gradient(ellipse 300px 300px at 50% 80%, rgba(42, 139, 110, 0.04), transparent);
+}
+
+/* Search box */
+.search-box { transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s, padding 0.3s; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); font-family: 'DM Sans', sans-serif; outline: none; }
+.search-box:focus { border-color: var(--accent2); }
+.search-box.collapsed { width: 0; opacity: 0; overflow: hidden; padding: 0; border: none; }
+.search-box.expanded { width: 240px; opacity: 1; padding: 8px 14px; }
+.search-box::placeholder { color: var(--muted); }
+
+/* Form input (shared) */
+.form-input { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.3s; }
+.form-input:focus { border-color: var(--accent2); }
+.form-input::placeholder { color: var(--muted); }
+
+/* Toast */
+.toast-msg {
+  position: fixed; bottom: 24px; right: 24px; background: var(--surface);
+  border: 1px solid var(--border); border-left: 3px solid var(--accent2);
+  color: var(--fg); padding: 14px 22px; border-radius: 8px; font-size: 14px;
+  z-index: 10000; transform: translateX(140%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+.toast-msg.show { transform: translateX(0); }
+
+/* Progress ring */
+.ring-track { stroke: var(--border); }
+.ring-fill { transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* Radial chart tooltip */
+.radial-tip {
+  position: absolute; background: rgba(13, 20, 17, 0.95); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 16px; pointer-events: none; opacity: 0;
+  transition: opacity 0.2s; z-index: 50; white-space: nowrap; backdrop-filter: blur(8px);
+}
+.radial-tip.show { opacity: 1; }
+
+/* Geography glow pulse */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(201, 168, 76, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(201, 168, 76, 0.2); }
+}
+.geo-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* Hero canvas */
+#globeCanvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
