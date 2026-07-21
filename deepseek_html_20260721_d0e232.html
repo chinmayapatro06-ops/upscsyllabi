@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UPSC Syllabus Visualizer</title>
+    <!-- D3.js for visualization -->
+    <script src="https://d3js.org/d3.v7.min.js">
+    </script>
+    <style>
+        /* ─── Reset & Base ─── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0b0f1a;
+            color: #e8edf5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            color: #8892b0;
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+
+        /* ─── Chart Container ─── */
+        #chart-container {
+            width: 100%;
+            max-width: 1000px;
+            background: #111827;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            border: 1px solid #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
+        }
+
+        #chart-container svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 700px;
+        }
+
+        /* ─── Tooltip ─── */
+        .tooltip {
+            position: fixed;
+            background: #1e293b;
+            color: #f1f5f9;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 300px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.9);
+            border: 1px solid #334155;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 999;
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip .label {
+            font-weight: 600;
+            color: #fcd34d;
+            font-size: 1rem;
+        }
+
+        .tooltip .detail {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        /* ─── Legend ─── */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 28px;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #111827;
+            border-radius: 16px;
+            border: 1px solid #1e293b;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        .legend-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        /* ─── Footer ─── */
+        .footer {
+            margin-top: 18px;
+            font-size: 0.8rem;
+            color: #475569;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #fcd34d;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 640px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            #chart-container {
+                padding: 10px;
+                min-height: 400px;
+            }
+            .legend {
+                gap: 8px 16px;
+                padding: 10px 14px;
+            }
+            .legend-item {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── Header ─── -->
+    <div class="header">
+        <h1>📚 UPSC Syllabus Visualizer</h1>
+        <p>Civil Services Examination &bull; Interactive Sunburst Chart</p>
+    </div>
+
+    <!-- ─── Chart ─── -->
+    <div id="chart-container">
+        <div id="chart"></div>
+    </div>
+
+    <!-- ─── Tooltip ─── -->
+    <div class="tooltip" id="tooltip">
+        <div class="label" id="tooltip-label"></div>
+        <div class="detail" id="tooltip-detail"></div>
+    </div>
+
+    <!-- ─── Legend ─── -->
+    <div class="legend" id="legend"></div>
+
+    <!-- ─── Footer ─── -->
+    <div class="footer">
+        Data based on official UPSC CSE syllabus &bull;
+        <a href="#" target="_blank">View on GitHub</a>
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  1.  UPSC SYLLABUS DATA (hierarchical)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const syllabusData = {
+            name: 'UPSC CSE',
+            children: [{
+                name: 'Prelims',
+                color: '#f59e0b',
+                children: [{
+                    name: 'GS Paper-I',
+                    color: '#fbbf24',
+                    children: [
+                        { name: 'Current Affairs (Nat. & Int.)', color: '#fcd34d' },
+                        { name: 'History of India & Freedom Struggle', color: '#fcd34d' },
+                        { name: 'Indian & World Geography', color: '#fcd34d' },
+                        { name: 'Indian Polity & Governance', color: '#fcd34d' },
+                        { name: 'Economic & Social Development', color: '#fcd34d' },
+                        { name: 'Environment & Climate Change', color: '#fcd34d' },
+                        { name: 'General Science', color: '#fcd34d' },
+                    ]
+                }, {
+                    name: 'CSAT (Paper-II)',
+                    color: '#f59e0b',
+                    children: [
+                        { name: 'Comprehension', color: '#fbbf24' },
+                        { name: 'Interpersonal & Communication Skills', color: '#fbbf24' },
+                        { name: 'Logical Reasoning & Analytical Ability', color: '#fbbf24' },
+                        { name: 'Decision-Making & Problem-Solving', color: '#fbbf24' },
+                        { name: 'General Mental Ability', color: '#fbbf24' },
+                        { name: 'Basic Numeracy (Class X)', color: '#fbbf24' },
+                        { name: 'Data Interpretation', color: '#fbbf24' },
+                    ]
+                }]
+            }, {
+                name: 'Mains',
+                color: '#3b82f6',
+                children: [{
+                    name: 'Paper-I: Essay',
+                    color: '#60a5fa',
+                    children: [
+                        { name: 'Essay Writing (2 sections, 4 topics each)', color: '#93c5fd' }
+                    ]
+                }, {
+                    name: 'Paper-II: GS-I',
+                    color: '#60a5fa',
+                    children: [
+                        { name: 'Indian Heritage & Culture', color: '#93c5fd' },
+                        { name: 'History of India & World', color: '#93c5fd' },
+                        { name: 'Geography of India & World', color: '#93c5fd' },
+                        { name: 'Indian Society', color: '#93c5fd' },
+                    ]
+                }, {
+                    name: 'Paper-III: GS-II',
+                    color: '#60a5fa',
+                    children: [
+                        { name: 'Governance & Constitution', color: '#93c5fd' },
+                        { name: 'Polity & Social Justice', color: '#93c5fd' },
+                        { name: 'International Relations', color: '#93c5fd' },
+                    ]
+                }, {
+                    name: 'Paper-IV: GS-III',
+                    color: '#60a5fa',
+                    children: [
+                        { name: 'Technology & Economic Development', color: '#93c5fd' },
+                        { name: 'Biodiversity & Environment', color: '#93c5fd' },
+                        { name: 'Security & Disaster Management', color: '#93c5fd' },
+                    ]
+                }, {
+                    name: 'Paper-V: GS-IV',
+                    color: '#60a5fa',
+                    children: [
+                        { name: 'Ethics & Integrity', color: '#93c5fd' },
+                        { name: 'Aptitude & Attitude', color: '#93c5fd' },
+                    ]
+                }, {
+                    name: 'Optional Subject I',
+                    color: '#8b5cf6',
+                    children: [
+                        { name: 'Optional Paper 1', color: '#a78bfa' },
+                        { name: 'Optional Paper 2', color: '#a78bfa' },
+                    ]
+                }, {
+                    name: 'Optional Subject II',
+                    color: '#8b5cf6',
+                    children: [
+                        { name: 'Optional Paper 1', color: '#a78bfa' },
+                        { name: 'Optional Paper 2', color: '#a78bfa' },
+                    ]
+                }]
+            }, {
+                name: 'Interview',
+                color: '#10b981',
+                children: [{
+                    name: 'Personality Test',
+                    color: '#34d399',
+                    children: [
+                        { name: 'Mental Alertness', color: '#6ee7b7' },
+                        { name: 'Critical Thinking', color: '#6ee7b7' },
+                        { name: 'Leadership Qualities', color: '#6ee7b7' },
+                        { name: 'Social & Moral Integrity', color: '#6ee7b7' },
+                    ]
+                }]
+            }]
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  2.  BUILD LEGEND
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const legendData = [
+            { label: 'Prelims', color: '#f59e0b' },
+            { label: 'Mains', color: '#3b82f6' },
+            { label: 'Interview', color: '#10b981' },
+        ];
+
+        const legendEl = document.getElementById('legend');
+        legendData.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'legend-item';
+            div.innerHTML = `
+                <span class="legend-swatch" style="background:${item.color};"></span>
+                ${item.label}
+            `;
+            legendEl.appendChild(div);
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  3.  D3 SUNBURST
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const width = 920;
+        const height = 800;
+        const radius = Math.min(width, height) / 2 - 40;
+
+        // Color scale – falls back to a nice palette
+        const color = d3.scaleOrdinal()
+            .domain(['UPSC CSE', 'Prelims', 'Mains', 'Interview'])
+            .range(['#1e293b', '#f59e0b', '#3b82f6', '#10b981']);
+
+        // Partition layout
+        const partition = d3.partition()
+            .size([2 * Math.PI, radius]);
+
+        // Root hierarchy
+        const root = d3.hierarchy(syllabusData)
+            .sum(d => 1) // all nodes have equal weight
+            .sort((a, b) => d3.ascending(a.data.name, b.data.name));
+
+        partition(root);
+
+        // Arc generator
+        const arc = d3.arc()
+            .startAngle(d => d.x0)
+            .endAngle(d => d.x1)
+            .innerRadius(d => d.y0)
+            .outerRadius(d => d.y1)
+            .padAngle(0.01)
+            .padRadius(radius / 2);
+
+        // SVG
+        const svg = d3.select('#chart')
+            .append('svg')
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .style('width', '100%')
+            .style('height', 'auto')
+            .append('g')
+            .attr('transform', `translate(${width / 2}, ${height / 2})`);
+
+        // ─── Tooltip refs ───
+        const tooltip = document.getElementById('tooltip');
+        const tooltipLabel = document.getElementById('tooltip-label');
+        const tooltipDetail = document.getElementById('tooltip-detail');
+
+        // ─── Draw arcs ───
+        const path = svg.selectAll('path')
+            .data(root.descendants())
+            .enter()
+            .append('path')
+            .attr('d', arc)
+            .attr('fill', d => {
+                // Use node's own color if set, else fallback
+                if (d.data.color) return d.data.color;
+                return color(d.data.name);
+            })
+            .attr('stroke', '#0b0f1a')
+            .attr('stroke-width', 1.2)
+            .attr('opacity', 0.9)
+            .style('cursor', 'pointer')
+            .style('transition', 'opacity 0.2s');
+
+        // ─── Hover: tooltip + highlight ───
+        path.on('mouseover', function(event, d) {
+            // Highlight
+            d3.select(this).attr('opacity', 1);
+            d3.select(this).attr('stroke', '#fcd34d').attr('stroke-width', 2.5);
+
+            // Tooltip
+            const name = d.data.name;
+            const parentName = d.parent ? d.parent.data.name : '';
+            const depth = d.depth;
+
+            let detail = '';
+            if (depth === 0) detail = 'Civil Services Examination';
+            else if (depth === 1) detail = `Stage • ${d.children ? d.children.length : 0} papers`;
+            else if (depth === 2) detail = `Paper • ${d.children ? d.children.length : 0} topics`;
+            else detail = 'Topic';
+
+            tooltipLabel.textContent = name;
+            tooltipDetail.textContent = parentName ? `${parentName} › ${detail}` : detail;
+
+            tooltip.classList.add('visible');
+
+            // Position
+            const [mx, my] = d3.pointer(event, document.body);
+            let left = mx + 16;
+            let top = my - 10;
+            // Keep in viewport
+            if (left + 300 > window.innerWidth) left = mx - 310;
+            if (top + 80 > window.innerHeight) top = window.innerHeight - 90;
+            if (top < 10) top = 10;
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+        });
+
+        path.on('mousemove', function(event) {
+            const [mx, my] = d3.pointer(event, document.body);
+            let left = mx + 16;
+            let top = my - 10;
+            if (left + 300 > window.innerWidth) left = mx - 310;
+            if (top + 80 > window.innerHeight) top = window.innerHeight - 90;
+            if (top < 10) top = 10;
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+        });
+
+        path.on('mouseout', function() {
+            d3.select(this).attr('opacity', 0.9).attr('stroke', '#0b0f1a').attr('stroke-width', 1.2);
+            tooltip.classList.remove('visible');
+        });
+
+        // ─── Click: zoom to node ───
+        path.on('click', function(event, d) {
+            // If already at this node and it's not the root, zoom out to parent
+            if (d3.select(this).attr('opacity') === '1' && d.depth > 0) {
+                zoomTo(d.parent || root);
+            } else {
+                zoomTo(d);
+            }
+        });
+
+        // ─── Zoom function ───
+        function zoomTo(p) {
+            const duration = 600;
+
+            // Update data
+            root.each(d => {
+                d.target = {
+                    x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))),
+                    x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))),
+                    y0: Math.max(0, d.y0 - p.y0),
+                    y1: Math.max(0, d.y1 - p.y0),
+                };
+            });
+
+            // Transition arcs
+            path.transition()
+                .duration(duration)
+                .attrTween('d', function(d) {
+                    const interpolateX0 = d3.interpolate(d.x0, d.target.x0);
+                    const interpolateX1 = d3.interpolate(d.x1, d.target.x1);
+                    const interpolateY0 = d3.interpolate(d.y0, d.target.y0);
+                    const interpolateY1 = d3.interpolate(d.y1, d.target.y1);
+                    return function(t) {
+                        d.x0 = interpolateX0(t);
+                        d.x1 = interpolateX1(t);
+                        d.y0 = interpolateY0(t);
+                        d.y1 = interpolateY1(t);
+                        return arc(d);
+                    };
+                });
+
+            // Update stroke opacity for non-visible nodes
+            path.transition()
+                .duration(duration)
+                .attr('opacity', function(d) {
+                    return d.target.x1 > d.target.x0 && d.target.y1 > d.target.y0 ? 0.9 : 0.05;
+                });
+        }
+
+        // ─── Click on background to reset ───
+        svg.on('click', function(event) {
+            // Only reset if clicked on background (not a path)
+            if (event.target.tagName === 'svg' || event.target.tagName === 'g') {
+                zoomTo(root);
+            }
+        });
+
+        // ─── Initial: start zoomed to root ───
+        // (already there)
+
+        // ─── Responsive: recalc on resize ───
+        // (viewBox handles it)
+        console.log('✅ UPSC Syllabus Visualizer ready!');
+    </script>
+
+</body>
+</html>
